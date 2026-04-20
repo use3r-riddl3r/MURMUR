@@ -48,3 +48,4 @@ Thumbs.db
 !*.json
 !LICENSE
 !.env.example
+CAMERAS_WITH_NETWORK_DATA.geojson
