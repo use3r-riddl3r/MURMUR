@@ -23,7 +23,7 @@ Open terminal/command prompt in this folder and run:
 
 ```bash
 # Navigate to this folder
-cd C:\Users\Squir\Desktop\discord-flock
+cd C:\Users\Squir\Desktop\MURMUR
 
 # Initialize git
 git init
@@ -32,10 +32,10 @@ git init
 git add .
 
 # Create first commit
-git commit -m "Initial commit: FLOCK surveillance map"
+git commit -m "Initial commit: MURMUR surveillance map"
 
 # Add your GitHub repository as remote (REPLACE WITH YOUR URL)
-git remote add origin https://github.com/YOUR_USERNAME/discord-flock.git
+git remote add origin https://github.com/use3r-riddl3r/MURMUR.git
 
 # Push to GitHub
 git branch -M main
@@ -65,12 +65,7 @@ git push -u origin main
 
 Your map will be live at:
 ```
-https://YOUR_USERNAME.github.io/discord-flock/
-```
-
-Or if you named it differently:
-```
-https://YOUR_USERNAME.github.io/REPOSITORY_NAME/
+https://use3r-riddl3r.github.io/MURMUR/
 ```
 
 ---

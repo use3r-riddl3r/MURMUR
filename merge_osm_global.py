@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Merge global OSM surveillance cameras with existing FLOCK data
-Converts OSM format to GeoJSON and deduplicates
+Объединить глобальные камеры наблюдения OSM с существующими данными FLOCK
+Преобразует формат OSM в GeoJSON и удаляет дубликаты
 """
 
 import json
@@ -9,7 +9,7 @@ from pathlib import Path
 from collections import defaultdict
 
 def osm_to_geojson(osm_data):
-    """Convert OSM format to GeoJSON FeatureCollection"""
+    """Преобразовать формат OSM в GeoJSON FeatureCollection"""
     features = []
 
     for element in osm_data.get('elements', []):
@@ -32,45 +32,45 @@ def osm_to_geojson(osm_data):
 
 def main():
     print("="*60)
-    print("MERGING GLOBAL OSM SURVEILLANCE CAMERAS")
+    print("ОБЪЕДИНЕНИЕ ГЛОБАЛЬНЫХ КАМЕР НАБЛЮДЕНИЯ OSM")
     print("="*60)
 
-    # Load existing cameras
-    print("\nLoading existing FLOCK cameras...")
+    # Загрузить существующие камеры
+    print("\nЗагрузка существующих камер FLOCK...")
     with open('CAMERAS_WITH_NETWORK_DATA.geojson', 'r', encoding='utf-8') as f:
         existing_data = json.load(f)
 
-    print(f"Current cameras: {len(existing_data['features']):,}")
+    print(f"Текущие камеры: {len(existing_data['features']):,}")
 
-    # Create lookup for deduplication (by coordinates rounded to 4 decimals)
+    # Создать справочник для удаления дубликатов (по координатам, округленным до 4 знаков)
     existing_coords = set()
     for feat in existing_data['features']:
         lon, lat = feat['geometry']['coordinates']
         coord_key = f"{lat:.4f},{lon:.4f}"
         existing_coords.add(coord_key)
 
-    print(f"Unique coordinate keys: {len(existing_coords):,}")
+    print(f"Уникальные ключи координат: {len(existing_coords):,}")
 
-    # Load and merge OSM regional files
+    # Загрузить и объединить региональные файлы OSM
     osm_dir = Path('data/raw_osm_global')
     osm_files = sorted(osm_dir.glob('osm_surveillance_*.json'))
 
-    print(f"\nFound {len(osm_files)} OSM regional files")
+    print(f"\nНайдено {len(osm_files)} региональных файлов OSM")
 
     new_features = []
     duplicates = 0
 
     for osm_file in osm_files:
         region = osm_file.stem.replace('osm_surveillance_', '').split('_')[0]
-        print(f"\nProcessing {region}...")
+        print(f"\nОбработка {region}...")
 
         with open(osm_file, 'r', encoding='utf-8') as f:
             osm_data = json.load(f)
 
         features = osm_to_geojson(osm_data)
-        print(f"  Raw cameras: {len(features):,}")
+        print(f"  Сырые камеры: {len(features):,}")
 
-        # Deduplicate
+        # Удалить дубликаты
         region_new = 0
         for feat in features:
             lon, lat = feat['geometry']['coordinates']
@@ -83,36 +83,36 @@ def main():
             else:
                 duplicates += 1
 
-        print(f"  New cameras: {region_new:,}")
-        print(f"  Duplicates: {len(features) - region_new:,}")
+        print(f"  Новые камеры: {region_new:,}")
+        print(f"  Дубликаты: {len(features) - region_new:,}")
 
-    # Merge
+    # Объединить
     print(f"\n{'='*60}")
-    print("MERGE SUMMARY")
+    print("СВОДКА ПО ОБЪЕДИНЕНИЮ")
     print(f"{'='*60}")
-    print(f"Existing cameras: {len(existing_data['features']):,}")
-    print(f"New unique cameras: {len(new_features):,}")
-    print(f"Duplicates skipped: {duplicates:,}")
-    print(f"Total after merge: {len(existing_data['features']) + len(new_features):,}")
+    print(f"Существующие камеры: {len(existing_data['features']):,}")
+    print(f"Новые уникальные камеры: {len(new_features):,}")
+    print(f"Пропущено дубликатов: {duplicates:,}")
+    print(f"Всего после объединения: {len(existing_data['features']) + len(new_features):,}")
 
-    # Combine
+    # Объединить
     merged_data = {
         'type': 'FeatureCollection',
         'features': existing_data['features'] + new_features
     }
 
-    # Save merged file
-    print(f"\nSaving merged data...")
+    # Сохранить объединенный файл
+    print(f"\nСохранение объединенных данных...")
     with open('CAMERAS_WITH_NETWORK_DATA.geojson', 'w', encoding='utf-8') as f:
         json.dump(merged_data, f)
 
-    print(f"Saved to CAMERAS_WITH_NETWORK_DATA.geojson")
+    print(f"Сохранено в CAMERAS_WITH_NETWORK_DATA.geojson")
 
-    # Update camera count in summary
-    print(f"\nFinal camera count: {len(merged_data['features']):,}")
+    # Обновить количество камер в сводке
+    print(f"\nИтоговое количество камер: {len(merged_data['features']):,}")
 
     print("\n" + "="*60)
-    print("SUCCESS - Ready to regenerate tiles")
+    print("УСПЕХ - Готово к повторной генерации плиток")
     print("="*60)
 
 if __name__ == '__main__':

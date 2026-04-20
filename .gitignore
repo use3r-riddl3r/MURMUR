@@ -27,7 +27,24 @@ __pycache__/
 .Python
 env/
 venv/
+.env
 
-# Don't ignore our data files!
+# Node/npm (if adding frontend tooling later)
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# OS-specific
+.DS_Store
+Thumbs.db
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# IMPORTANT: Don't ignore our data and config files!
 !*.geojson
 !*.json
+!LICENSE
+!.env.example

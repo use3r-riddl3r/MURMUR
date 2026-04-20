@@ -1,210 +1,187 @@
-# FLOCK Surveillance Network Map
+```
+ ███╗   ███╗██╗   ██╗██████╗ ███╗   ███╗██╗   ██╗██████╗
+ ████╗ ████║██║   ██║██╔══██╗████╗ ████║██║   ██║██╔══██╗
+ ██╔████╔██║██║   ██║██████╔╝██╔████╔██║██║   ██║██████╔╝
+ ██║╚██╔╝██║██║   ██║██╔══██╗██║╚██╔╝██║██║   ██║██╔══██╗
+ ██║ ╚═╝ ██║╚██████╔╝██║  ██║██║ ╚═╝ ██║╚██████╔╝██║  ██║
+ ╚═╝     ╚═╝ ╚═════╝ ╚═╝  ╚═╝╚═╝     ╚═╝ ╚═════╝ ╚═╝  ╚═╝
+  surveillance network map  —  a tribute to ringmast4r's FLOCK
+```
 
-> Interactive map visualizing 336,708+ surveillance cameras and their data-sharing networks worldwide
+> Interactive OSINT map of 336,708+ surveillance cameras, live feeds, and data-sharing networks worldwide.
+> Born from [ringmast4r's FLOCK](https://github.com/ringmast4r/FLOCK) — expanded for a global audience.
 
-**🌐 Live Demo**: https://ringmast4r.github.io/FLOCK/
+**🌐 Live Demo**: https://use3r-riddl3r.github.io/MURMUR/
+
+<a href="https://hits.sh/github.com/use3r-riddl3r/MURMUR/"><img alt="Visitors" src="https://hits.sh/github.com/use3r-riddl3r/MURMUR.svg?style=for-the-badge&label=Visitors&color=ff8c00"/></a>
+
+![MURMUR Interface](murmur-interface.png)
 
 ---
 
-## 🎯 Overview
+## What is MURMUR?
 
-This map visualizes the massive global surveillance infrastructure, showing:
-- **336,708 surveillance cameras** from public databases worldwide
-- **Network connections** showing data sharing between law enforcement agencies
-- **Police precincts** and their surveillance camera networks
-- **ALPR (Automatic License Plate Reader)** cameras
-- **Flock Safety** camera installations
-- **Global coverage**: United States, Europe, Asia, Africa, Oceania, Americas
+A murmuration is what a flock of starlings does — thousands of individuals moving as one, watching, reacting. That's what surveillance networks do too.
 
-## ✨ Features
+MURMUR started as a fork of [ringmast4r's FLOCK](https://github.com/ringmast4r/FLOCK), a tool he built to map the sprawling Flock Safety camera network across the United States. FLOCK was excellent at what it did — this project takes that foundation and expands it for people outside the US, particularly in the UK and Europe, where Flock Safety cameras are rare but surveillance infrastructure is just as dense.
 
-- 🗺️ **Interactive Map**: Pan, zoom, and click cameras to explore
-- 🌍 **Global Coverage**: 336K+ cameras across all continents
-- 🕸️ **Network Visualization**: See data-sharing connections between cameras
-- 🎨 **Color-Coded Markers**: Different colors for ALPR, Flock, and other surveillance types
-- 📊 **Marker Clustering**: Efficient rendering of 336K+ markers
-- 🗂️ **Tile-Based Loading**: Fast performance with on-demand tile loading
-- 📱 **Mobile Responsive**: Works on all devices
-- ⚡ **Fast Loading**: Optimized with geographic tiling
-- 🔍 **Detailed Popups**: Click any marker for detailed information
+---
 
-## 🚀 Quick Start
+## What Changed From FLOCK
 
-### View the Map Online
-Visit the live map at: `https://YOUR_USERNAME.github.io/discord-flock/`
+### Country-based loading (crash fix)
+The original tool tried to load all 336,708 cameras at once. On most machines this crashed the browser. MURMUR now requires you to select a country first — only that country's tiles load, keeping memory usage manageable and the map responsive.
 
-### Run Locally
+### UK: TfL JamCam live feeds
+When you select the United Kingdom, MURMUR automatically pulls 1,000+ live London traffic camera feeds from the Transport for London API. Each camera popup shows a live thumbnail image, a direct video link, and a still image link — actual footage, not just a pin on a map.
+
+### France: national camera dataset
+Selecting France loads the national CCTV dataset from data.gouv.fr alongside the OSM tiles, giving better coverage than OSM alone.
+
+### OSINT toolkit expanded for EU users
+FLOCK's original OSINT buttons were built around Shodan geo filters which require a paid plan ($69/month) and are US-centric. MURMUR replaces and expands these with options that work on free accounts and are useful anywhere in the world:
+
+- **Shodan** — operator name search, brand+country search, country webcam search (free tier)
+- **ZoomEye** — geo-based webcam search, operator lookup (free)
+- **FOFA** — title+country query with base64 encoding (free, EU-friendly)
+- **Insecam** — country camera listing (free)
+- **Google Dorks** — login page, stream URL enumeration, coordinate search
+
+All queries pre-filled from the camera's own metadata. No API keys needed.
+
+### Code rewrite
+The original codebase grew organically and had accumulated some issues (variables re-declared in loops, `btoa()` crashing on European operator names with accented characters, `setTimeout` hacks for map animation timing). The JS was rewritten into 12 clean modules with proper `async/await` throughout, fixing these bugs in the process.
+
+---
+
+## Features
+
+| Feature | Detail |
+|---------|--------|
+| 🌍 Country-based loading | Click any country — only that region's data loads |
+| 📡 TfL JamCam (UK) | 1,000+ live London camera feeds with embedded thumbnails |
+| 🇫🇷 France dataset | French national CCTV data via data.gouv.fr |
+| 🕸️ Network visualisation | Click a Flock/ALPR camera to draw data-sharing lines to partner agencies |
+| 🔍 OSINT per camera | Shodan, ZoomEye, FOFA, Insecam, Google dorks — pre-filled per camera |
+| 📊 Agency stats | Vehicle counts, search volumes, data retention periods, full partner lists |
+| 🔗 Live feed links | Webcam URLs, stream links, Mapillary/Panoramax imagery, sous-surveillance.net refs |
+| 📱 Mobile responsive | Collapsible panel, touch-friendly |
+
+---
+
+## Camera Types
+
+| Colour | Type | Source |
+|--------|------|--------|
+| 🔴 Red (pulsing) | Flock Safety | DeFlock.me / OpenStreetMap |
+| 🟣 Purple | ALPR / ANPR | OpenStreetMap |
+| 🔵 Cyan | TfL JamCam | TfL API (live) |
+| 🟠 Orange | Speed Camera | OpenStreetMap |
+| 🔵 Blue | General Surveillance | OpenStreetMap |
+| 🟢 Green | Police / Agency | Derived from network data |
+
+---
+
+## Quick Start
+
 ```bash
-# Clone the repository
-git clone https://github.com/YOUR_USERNAME/discord-flock.git
-cd discord-flock
-
-# Start a local web server
-python -m http.server 8000
-
-# Open in browser
-# http://localhost:8000/index.html
+git clone https://github.com/use3r-riddl3r/MURMUR.git
+cd MURMUR
+python3 -m http.server 8080
+# Open http://localhost:8080
 ```
 
-## 📁 Files
+### How to Use
+1. Click any country on the globe
+2. Map flies to that country and loads its cameras
+3. **UK** → TfL JamCam live feeds load automatically
+4. **France** → data.gouv.fr dataset loads automatically
+5. Click any camera marker → popup with data, feeds, OSINT links
+6. Click a red (Flock) or purple (ALPR) camera → network sharing lines appear
+7. **Show ALL Lines** — draws every known connection
+8. **Clear & Restore** — returns to cluster view
+9. Legend items are clickable — toggle types on/off
+
+---
+
+## Data Sources
+
+| Source | Data | Coverage |
+|--------|------|----------|
+| [OpenStreetMap](https://www.openstreetmap.org/) | 336K+ camera locations + metadata | Global |
+| [DeFlock.me](https://deflock.me/) | Flock Safety cameras + agency network data | USA |
+| [McClatchy Private Eyes](https://github.com/mcclatchy-southeast/private_eyes) | ALPR placement + partnerships | USA |
+| [TfL JamCam API](https://api.tfl.gov.uk/Place/Type/JamCam) | 1,000+ live London camera feeds | London, UK |
+| [data.gouv.fr](https://www.data.gouv.fr/) | French national camera dataset | France |
+
+---
+
+## Camera Coverage
+
+| Region | Cameras |
+|--------|---------|
+| Europe | 246,000+ |
+| United States | 75,000+ |
+| Canada | 28,000+ |
+| Asia | 19,000+ |
+| Central America | 13,000+ |
+| South America | 9,000+ |
+| Oceania | 3,000+ |
+| Africa | 2,000+ |
+
+---
+
+## File Structure
 
 ```
-discord-flock/
-├── index.html                          (25KB - Main HTML file)
-├── data/tiles/                         (Tiled camera data for fast loading)
-├── camera_networks.json                (16MB - Network connections data)
-├── CAMERAS_WITH_NETWORK_DATA.geojson   (102MB - Master camera dataset, local only)
-├── police_precincts_usa.geojson        (13MB - Police precinct boundaries)
-└── README.md                           (This file)
+MURMUR/
+├── index.html                   # Single-file app — 12 JS modules, no build step
+├── data/
+│   └── tiles/
+│       ├── index.json           # Tile manifest (512 tiles, zoom level 6)
+│       └── 6/{x}/{y}.json       # Individual tile data files
+├── create_tiles.py              # Tile generation script
+├── merge_osm_global.py          # Dataset merge script
+├── camera_networks.json         # Network connection data (16MB)
+└── favicon.svg
 ```
 
-**Note**: Master GeoJSON kept local only (exceeds GitHub 100MB limit). Map loads from optimized tiles.
-
-## 🎨 Map Legend
-
-| Color | Type | Description |
-|-------|------|-------------|
-| 🔴 Red (Glowing) | Flock Safety | Flock Safety brand cameras (pulsing effect) |
-| 🟣 Purple | ALPR Cameras | Automatic License Plate Readers |
-| 🔵 Blue | Other Surveillance | General surveillance cameras |
-| 🟢 Green | Police Stations | Stations receiving Flock camera data |
-
-## 💡 How to Use
-
-1. **Explore**: Pan and zoom to navigate the map
-2. **Click Cameras**: Click any orange/red marker to see its data-sharing network
-3. **Toggle Layers**: Use the legend (bottom right) to show/hide camera types
-4. **Network Lines**: Click "Show ALL Lines" to see all connections (warning: may be slow!)
-5. **Clear**: Click "Clear Lines" to remove network visualizations
-
-## 📊 Statistics
-
-- **Total Cameras**: 336,708 (worldwide)
-- **Network Connections**: 113,829+ data-sharing connections
-- **Police Precincts**: Thousands of precincts mapped
-- **Data Sources**: OpenStreetMap, DeFlock.me, public records
-- **Geographic Coverage**: Global (United States, Europe, Asia, Africa, Oceania, Americas)
-  - Europe: 246,000+ cameras
-  - United States: 75,000+ cameras
-  - Canada: 28,000+ cameras
-  - Asia: 19,000+ cameras
-  - Central America: 13,000+ cameras
-  - South America: 9,000+ cameras
-  - Oceania: 3,000+ cameras
-  - Africa: 2,000+ cameras
-
-## 🔧 Technical Details
-
-### Built With
-- [Leaflet.js](https://leafletjs.com/) - Interactive mapping library
-- [Leaflet.markercluster](https://github.com/Leaflet/Leaflet.markercluster) - Marker clustering
-- [OpenStreetMap](https://www.openstreetmap.org/) - Base map tiles
-
-### Performance
-- **HTML Size**: 25KB
-- **Tile-Based Loading**: Geographic tiles load on-demand based on viewport
-- **512 Optimized Tiles**: Data split across zoom level 6 tiles
-- **Fast Initial Load**: Only visible tiles loaded (<2MB typical)
-- **Memory Efficient**: Loads only what you see
-- **Marker Clustering**: Efficient rendering of 336K+ points
-
-### Browser Support
-- ✅ Chrome/Edge (recommended)
-- ✅ Firefox
-- ✅ Safari
-- ✅ Mobile browsers
-
-## 📡 Data Sources
-
-All data is from publicly available sources:
-
-- **[OpenStreetMap](https://www.openstreetmap.org/)**: Open-source mapping data with surveillance tags
-- **[EFF Atlas of Surveillance](https://atlasofsurveillance.org/)**: Electronic Frontier Foundation database
-- **[McClatchy Private Eyes](https://github.com/mcclatchy-southeast/private_eyes)**: Investigative journalism ALPR database
-- **[DeFlock.me](https://deflock.me/)**: Community-sourced Flock Safety camera locations
-
-### Data Freshness
-- Last updated: November 2025
-- Dataset includes network sharing data between law enforcement agencies
-
-## 🔒 Privacy & Ethics
-
-### This Project is For:
-- ✅ Public awareness of surveillance infrastructure
-- ✅ Privacy advocacy and education
-- ✅ Research and journalism
-- ✅ Understanding surveillance scope
-
-### NOT For:
-- ❌ Vandalism or property destruction
-- ❌ Harassment of operators
-- ❌ Illegal activities
-- ❌ Evasion of law enforcement
-
-### Legal Notes
-- All data from publicly available sources
-- OpenStreetMap data: [ODbL License](https://opendatacommons.org/licenses/odbl/)
-- Camera locations on public streets are increasingly considered public records
-- Washington court ruled Flock camera data are public records (Nov 2025)
-
-## 🤝 Contributing
-
-Want to add more cameras or improve the map?
-
-1. **Add cameras to OpenStreetMap**:
-   - Create account at openstreetmap.org
-   - Use iD Editor or JOSM
-   - Tag with `man_made=surveillance`
-
-2. **Report via DeFlock.me**:
-   - Use mobile apps (iOS/Android)
-   - Submit camera locations
-
-3. **Improve this code**:
-   - Fork the repository
-   - Make improvements
-   - Submit pull request
-
-## 📞 Support & Resources
-
-- **GitHub Issues**: Report bugs or request features
-- **DeFlock.me**: https://deflock.me/
-- **EFF**: https://www.eff.org/
-- **ACLU**: https://www.aclu.org/
-
-## 📄 License
-
-- **Code**: MIT License (or your choice)
-- **Data**: ODbL (OpenStreetMap), various public domain sources
-- **Map Tiles**: © OpenStreetMap contributors
-
-## 🙏 Credits
-
-- **Data**: DeFlock.me community, OpenStreetMap contributors
-- **Mapping**: Leaflet.js
-- **Clustering**: Leaflet.markercluster
-- **Inspiration**: Privacy advocates worldwide
+> `CAMERAS_WITH_NETWORK_DATA.geojson` (102MB master dataset) kept local only — exceeds GitHub's file limit. The map loads from pre-built tiles.
 
 ---
 
-## 📈 Project Stats
+## Technical Details
 
-![GitHub Stars](https://img.shields.io/github/stars/Ringmast4r/FLOCK?style=social)
-![GitHub Forks](https://img.shields.io/github/forks/Ringmast4r/FLOCK?style=social)
-![GitHub Issues](https://img.shields.io/github/issues/Ringmast4r/FLOCK)
+### JS Module Architecture
+```
+CONFIG   — constants (API endpoints, colours, cluster config)
+STATE    — single mutable store
+UTILS    — pure helpers (tile maths, safeBtoa, HTML builders)
+LOADER   — spinner UI
+POPUP    — popup HTML generation
+MARKERS  — marker creation and cluster management
+SOURCES  — async data fetching (tiles, TfL, France)
+NETWORK  — data-sharing line visualisation
+COUNTRY  — country detection, bbox filter, source routing
+UI       — DOM updates, layer toggles, source badges
+SEARCH   — Nominatim geocoding + geolocation
+APP      — entry point and startup sequence
+```
 
-**Made with ❤️ for privacy awareness**
+### Stack
+- [Leaflet.js 1.9.4](https://leafletjs.com/)
+- [Leaflet.markercluster 1.5.3](https://github.com/Leaflet/Leaflet.markercluster)
+- [OpenStreetMap](https://www.openstreetmap.org/) base tiles
+- [Nominatim](https://nominatim.openstreetmap.org/) geocoding
+- [TfL Unified API](https://api.tfl.gov.uk/)
+- [data.gouv.fr](https://www.data.gouv.fr/)
 
 ---
 
-**Disclaimer**: This is an educational project for public awareness. Use responsibly.
+## Credits
 
----
+Built on the foundation of [ringmast4r's FLOCK](https://github.com/ringmast4r/FLOCK).
+All data from publicly available sources. All code MIT licensed.
 
-### 📊 Traffic Stats
-
-<a href="https://hits.sh/github.com/Ringmast4r/FLOCK/"><img alt="Hits" src="https://hits.sh/github.com/Ringmast4r/FLOCK.svg?style=for-the-badge&label=Visitors&color=ff8c00"/></a>
-
----
-
-Brought to you by Ringmast4r 😘
+> *A murmuration is thousands of individuals moving as one.*
+> *This map shows the same thing — just in concrete and cable.*
