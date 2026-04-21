@@ -39,7 +39,7 @@ When you select the United Kingdom, MURMUR automatically pulls 1,000+ live Londo
 Selecting France loads the national CCTV dataset from data.gouv.fr alongside the OSM tiles, giving better coverage than OSM alone.
 
 ### OSINT toolkit expanded for EU users
-FLOCK's original OSINT buttons were built around Shodan geo filters which require a paid plan ($69/month) and are US-centric. MURMUR replaces and expands these with options that work on free accounts and are useful anywhere in the world:
+ MURMUR replaces and expands these options allowing shodan,zoomeye,fofa and more to start OSINT investigations and are useful anywhere in the world:
 
 - **Shodan** — operator name search, brand+country search, country webcam search (free tier)
 - **ZoomEye** — geo-based webcam search, operator lookup (free)
